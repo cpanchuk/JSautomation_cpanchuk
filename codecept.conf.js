@@ -26,7 +26,6 @@ exports.config = {
     I: './steps_file.js',
     basePage: "./pages/base.js",
     registerPage: "./pages/register.js",
-    registerConfirmPage: "./pages/registerConfirm.js",
   },
   name: 'JSautomation_cpanchuk'
 }
