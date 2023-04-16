@@ -35,5 +35,5 @@ module.exports = {
   verifyRegisterConfirmPage() {
     I.see('Your Account Has Been Created!');
   },
-  
+   
 }

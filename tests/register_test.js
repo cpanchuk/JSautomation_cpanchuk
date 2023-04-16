@@ -1,5 +1,3 @@
-const { fillNewUserForm } = require("../pages/register");
-
 Feature('register');
 
 const NEW_USER = {
@@ -10,7 +8,7 @@ const NEW_USER = {
     password: "Test4587"
 };
 
-Scenario('register new user',  ({ I, basePage, registerPage }) => {
+Scenario('register new user',  ({ I, basePage, registerPage, }) => {
     I.amOnPage('http://opencart.qatestlab.net/');
     basePage.clickMyAccountSpoiler();
     basePage.clickRegisterLink();
