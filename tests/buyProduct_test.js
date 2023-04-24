@@ -12,24 +12,22 @@ Feature('purchase');
 
 Scenario.only('buy product',  async ({ I, basePage, testProductPage, checkoutPage}) => {
     I.login(USER);
+    //basePage.clearCart();  спроби почистити корзину крашать браузер до завершення процессу
+
     I.amOnPage("http://opencart.qatestlab.net/index.php?route=product/product&product_id=45");
-    testProductPage.chooseProductColor();
+    testProductPage.chooseProductColour();
     testProductPage.chooseProductSize();
-    const PRICE = await I.grabTextFrom({xpath: '//span[@class="price-new"]'});
+    let sumProductPrice = await testProductPage.grabProductPrices();
     testProductPage.addProductToCart();
     basePage.goToCheckout();
     checkoutPage.fillBillingDetails(USER);
     checkoutPage.submitShippingAddress();
     checkoutPage.submitShippingMethod();
     checkoutPage.submitPaymentAddress();
-
-    const SHIPPINGRATE = await I.grabTextFrom({xpath: '//table[@class="table table-bordered table-hover"]/tfoot/tr[2]/td[2]'});
-    const ECOTAX = await I.grabTextFrom({xpath: '//table[@class="table table-bordered table-hover"]/tfoot/tr[3]/td[2]'});
-    const VAT = await I.grabTextFrom({xpath: '//table[@class="table table-bordered table-hover"]/tfoot/tr[4]/td[2]'});
-    const CHECKOUTPRICE = await I.grabTextFrom({xpath: '//table[@class="table table-bordered table-hover"]/tfoot/tr[5]/td[2]'});
-    I.assertNotEqual(+PRICE.slice(1)+SHIPPINGRATE.slice(1)+ECOTAX.slice(1)+VAT.slice(1), +CHECKOUTPRICE.slice(1));
-    //Використовую assertNotEqual щоб тест не фейлився.
-
+    let sumTaxPrices = await checkoutPage.grabTaxPrices();
+    let checkoutTotalPrice = await checkoutPage.grabCheckoutPrice();
+    I.assertEqual(sumProductPrice + sumTaxPrices, checkoutTotalPrice);
     checkoutPage.confirmOrder();
+    I.see('Your order has been placed!');
 
 }).tag("buy");

@@ -18,6 +18,13 @@ module.exports = {
   submitPaymentMethodButton: {xpath: '//*[@id="button-payment-method"]'},
   confirmOrderButton: {xpath: '//*[@id="button-confirm"]'},
 
+  shippingRate: {xpath: '//table[@class="table table-bordered table-hover"]/tfoot/tr[2]/td[2]'},
+  ecoTax: {xpath: '//table[@class="table table-bordered table-hover"]/tfoot/tr[3]/td[2]'},
+  vat: {xpath: '//table[@class="table table-bordered table-hover"]/tfoot/tr[4]/td[2]'},
+  checkoutTotal: {xpath: '//table[@class="table table-bordered table-hover"]/tfoot/tr[5]/td[2]'},
+  orderCorfinmed: {xpath: '//div[@class="col-sm-12"]/h1'},
+
+ 
   fillBillingDetails (user) {
     I.click(this.newAddressToggle);
     I.fillField(this.paymentFirstName, user.firstName);
@@ -49,5 +56,28 @@ module.exports = {
     I.click(this.confirmOrderButton);
   },
 
+  async grabTaxPrices () {
+    let shippingRatePrice = parseFloat((await I.grabTextFrom(this.shippingRate)).match('([0-9]*[.])[0-9]*')[0]);
+    let ecoTaxPrice = parseFloat((await I.grabTextFrom(this.ecoTax)).match('([0-9]*[.])[0-9]*')[0]);
+    let vatPrice = parseFloat((await I.grabTextFrom(this.vat)).match('([0-9]*[.])[0-9]*')[0]);
+    
+    return this.sumTaxPrices(shippingRatePrice, ecoTaxPrice, vatPrice);
+  },
+  
+  sumTaxPrices(shippingRatePrice, ecoTaxPrice, vatPrice) {
+    let sum = shippingRatePrice + ecoTaxPrice + vatPrice;
+    return sum;
+  },
+
+  async grabCheckoutPrice () {
+    let checkoutTotalPrice = 
+      parseFloat((await I.grabTextFrom(this.checkoutTotal)).match('([0-9]*[,]|[.]*[0-9]*[.])+[0-9]*')[0].replace(',', ''));
+
+    return checkoutTotalPrice;
+  },
+
+  checkOrderConfirm() {
+    I.see(this.orderConfirmed);
+  }
 
 }
