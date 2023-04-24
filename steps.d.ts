@@ -2,7 +2,7 @@
 type steps_file = typeof import('./steps_file.js');
 type basePage = typeof import('./pages/base.js');
 type registerPage = typeof import('./pages/register.js');
-type testProductPage = typeof import('./pages/testProduct.js');
+type testProductPage = typeof import('./pages/product.js');
 type checkoutPage = typeof import('./pages/checkout.js');
 type ChaiWrapper = import('codeceptjs-chai');
 

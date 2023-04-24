@@ -10,23 +10,23 @@ const USER = {
 
 Feature('purchase');
 
-Scenario.only('buy product',  async ({ I, basePage, testProductPage, checkoutPage}) => {
+Scenario.only('buy product',  async ({ I, basePage, productPage, checkoutPage}) => {
     I.login(USER);
-    //basePage.clearCart();  спроби почистити корзину крашать браузер до завершення процессу
-
+    await basePage.clearCart(); 
+    pause();
     I.amOnPage("http://opencart.qatestlab.net/index.php?route=product/product&product_id=45");
-    testProductPage.chooseProductColour();
-    testProductPage.chooseProductSize();
-    let sumProductPrice = await testProductPage.grabProductPrices();
-    testProductPage.addProductToCart();
+    productPage.chooseProductColour();
+    productPage.chooseProductSize();
+    let productPrice = await productPage.getSumOfProductPrices();
+    productPage.addProductToCart();
     basePage.goToCheckout();
     checkoutPage.fillBillingDetails(USER);
     checkoutPage.submitShippingAddress();
     checkoutPage.submitShippingMethod();
     checkoutPage.submitPaymentAddress();
-    let sumTaxPrices = await checkoutPage.grabTaxPrices();
+    let productTax = await checkoutPage.getSumOfTaxes();
     let checkoutTotalPrice = await checkoutPage.grabCheckoutPrice();
-    I.assertEqual(sumProductPrice + sumTaxPrices, checkoutTotalPrice);
+    I.assertEqual(productPrice + productTax, checkoutTotalPrice);
     checkoutPage.confirmOrder();
     I.see('Your order has been placed!');
 

@@ -34,12 +34,8 @@ module.exports = {
   async clearCart() {
     I.click(this.cartSpoiler);
     I.click(this.viewCartButton);
-    let numOfProducts = await I.grabNumberOfVisibleElements(this.deleteProductFromCartButton);
-    console.log(numOfProducts);
-    while (numOfProducts != 0) {
+    while (await I.grabNumberOfVisibleElements(this.deleteProductFromCartButton) != 0) {
       I.click(this.deleteProductFromCartButton);
-      numOfProducts = await I.grabNumberOfVisibleElements(this.deleteProductFromCartButton); 
-      console.log(numOfProducts);
     };
   }
 

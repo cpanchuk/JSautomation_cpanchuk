@@ -56,17 +56,12 @@ module.exports = {
     I.click(this.confirmOrderButton);
   },
 
-  async grabTaxPrices () {
+  async getSumOfTaxes () {
     let shippingRatePrice = parseFloat((await I.grabTextFrom(this.shippingRate)).match('([0-9]*[.])[0-9]*')[0]);
     let ecoTaxPrice = parseFloat((await I.grabTextFrom(this.ecoTax)).match('([0-9]*[.])[0-9]*')[0]);
     let vatPrice = parseFloat((await I.grabTextFrom(this.vat)).match('([0-9]*[.])[0-9]*')[0]);
-    
-    return this.sumTaxPrices(shippingRatePrice, ecoTaxPrice, vatPrice);
-  },
-  
-  sumTaxPrices(shippingRatePrice, ecoTaxPrice, vatPrice) {
-    let sum = shippingRatePrice + ecoTaxPrice + vatPrice;
-    return sum;
+    let sumOfTaxes = shippingRatePrice + ecoTaxPrice + vatPrice;
+    return sumOfTaxes;
   },
 
   async grabCheckoutPrice () {

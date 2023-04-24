@@ -29,7 +29,7 @@ exports.config = {
     I: './steps_file.js',
     basePage: "./pages/base.js",
     registerPage: "./pages/register.js",
-    testProductPage: "./pages/testProduct.js",
+    productPage: "./pages/product.js",
     checkoutPage: "./pages/checkout.js",
   },
   name: 'JSautomation_cpanchuk'

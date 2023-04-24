@@ -27,18 +27,13 @@ module.exports = {
   },
 
 
-  async grabProductPrices () {
+  async getSumOfProductPrices () {
     let basePrice = parseFloat((await I.grabTextFrom(this.baseProductPrice)).match('([0-9]*[.])[0-9]*')[0]);
     let colourPrice = parseFloat((await I.grabTextFrom(this.chooseColour)).match('([0-9]*[.])[0-9]*')[0]);
     let sizePrice = parseFloat((await I.grabTextFrom(this.chooseSize)).match('([0-9]*[.])[0-9]*')[0]);
-
-    return this.sumProductPrices(basePrice, colourPrice, sizePrice);
+    let sumOfProductPrices = (basePrice + colourPrice + sizePrice) * 2;
+    return sumOfProductPrices;
     
   },
   
-  sumProductPrices(basePrice, colourPrice, sizePrice) {
-    let sum = (basePrice + colourPrice + sizePrice) * 2; 
-    //баг данного продукту, у корзину автоматично додаються 2 одиниці товару
-    return sum;
-  }
 }
