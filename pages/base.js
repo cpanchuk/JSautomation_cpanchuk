@@ -34,7 +34,7 @@ module.exports = {
   async clearCart() {
     I.click(this.cartSpoiler);
     I.click(this.viewCartButton);
-    while (await I.grabNumberOfVisibleElements(this.deleteProductFromCartButton) != 0) {
+    while (await I.grabNumberOfVisibleElements(this.deleteProductFromCartButton)) {
       I.click(this.deleteProductFromCartButton);
     };
   }
