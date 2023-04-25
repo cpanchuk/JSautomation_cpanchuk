@@ -7,8 +7,8 @@ module.exports = {
   telephoneField: {xpath: '//*[@id="input-telephone"]'},
   passwordField: {xpath: '//*[@id="input-password"]'},
   passwordConfirmField: {xpath: '//*[@id="input-confirm"]'},
-  privacyPolicyConfirmToggle: {xpath: '//*[@id="content"]/form/div/div/input[1]'},
-  continueButton: {xpath: '//*[@id="content"]/form/div/div/input[2]'},
+  privacyPolicyConfirmToggle: {xpath: '//div[@class="pull-right"]/input[@type="radio"]'},
+  continueButton: {xpath: '//div[@class="pull-right"]/input[@type="submit"]'},
 
 
   verifyRegisterPage() {

@@ -9,7 +9,7 @@ const NEW_USER = {
 };
 
 Scenario('register new user',  ({ I, basePage, registerPage, }) => {
-    I.amOnPage('http://opencart.qatestlab.net/');
+    I.openStore();
     basePage.clickMyAccountSpoiler();
     basePage.clickRegisterLink();
     registerPage.verifyRegisterPage();
