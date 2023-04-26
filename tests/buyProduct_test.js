@@ -40,7 +40,7 @@ Data(urlArray).Scenario('buy product',  async ({ I, current, basePage, productPa
         let checkoutTotalPrice = await checkoutPage.grabCheckoutPrice();
         I.assertEqual(productPrice + productTax, checkoutTotalPrice);
         checkoutPage.confirmOrder();
-        I.see('Your order has been placed!')
+        checkoutPage.verifyPurchaseSuccessful()
     };
 
 }).tag("buy");

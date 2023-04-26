@@ -1,3 +1,5 @@
+const base = require("./base");
+
 const { I } = inject();
 
 module.exports = {
@@ -22,7 +24,6 @@ module.exports = {
   ecoTax: {xpath: '//table[@class="table table-bordered table-hover"]/tfoot/tr[3]/td[2]'},
   vat: {xpath: '//table[@class="table table-bordered table-hover"]/tfoot/tr[4]/td[2]'},
   checkoutTotal: {xpath: '//table[@class="table table-bordered table-hover"]/tfoot/tr[5]/td[2]'},
-  orderCorfinmed: {xpath: '//div[@class="col-sm-12"]/h1'},
   productUnavailable: {xpath: '//span[@class="text-danger"]'},
 
  
@@ -63,22 +64,26 @@ module.exports = {
   },
 
   async getSumOfTaxes () {
-    let shippingRatePrice = parseFloat((await I.grabTextFrom(this.shippingRate)).match('([0-9]*[.])[0-9]*')[0]);
-    let ecoTaxPrice = parseFloat((await I.grabTextFrom(this.ecoTax)).match('([0-9]*[.])[0-9]*')[0]);
-    let vatPrice = parseFloat((await I.grabTextFrom(this.vat)).match('([0-9]*[.])[0-9]*')[0]);
+    let shippingRatePrice = parseFloat((await I.grabTextFrom(this.shippingRate)).replaceAll(/[^0-9\.]/g, ""));
+    let ecoTaxPrice = parseFloat((await I.grabTextFrom(this.ecoTax)).replaceAll(/[^0-9\.]/g, ""));
+    let vatPrice = parseFloat((await I.grabTextFrom(this.vat)).replaceAll(/[^0-9\.]/g, ""));
     let sumOfTaxes = shippingRatePrice + ecoTaxPrice + vatPrice;
     return sumOfTaxes;
   },
 
   async grabCheckoutPrice () {
     let checkoutTotalPrice = 
-      parseFloat((await I.grabTextFrom(this.checkoutTotal)).match('([0-9]*[,]|[.]*[0-9]*[.])+[0-9]*')[0].replace(',', ''));
+      parseFloat((await I.grabTextFrom(this.checkoutTotal)).replaceAll(/[^0-9\.]/g, ""));
 
     return checkoutTotalPrice;
   },
 
-  checkOrderConfirm() {
-    I.see(this.orderConfirmed);
+  confirmOrder () {
+    I.click(this.confirmOrderButton);
+  },
+
+  verifyPurchaseSuccessful() {
+    I.see('Your order has been placed!')
   }
 
 }
