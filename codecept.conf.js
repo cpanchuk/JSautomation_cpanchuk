@@ -32,8 +32,10 @@ exports.config = {
     productPage: "./pages/product.js",
     checkoutPage: "./pages/checkout.js",
   },
-  tryTo: {
-    enabled: true,
+  plugins: {
+    tryTo: {
+      enabled: true,
+    },
     pauseOnFail: {},
   },
   name: 'JSautomation_cpanchuk'

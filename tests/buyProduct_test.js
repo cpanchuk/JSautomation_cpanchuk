@@ -29,7 +29,7 @@ Data(urlArray).Scenario('buy product',  async ({ I, current, basePage, productPa
     let productPrice = await productPage.getSumOfProductPrices();
     productPage.addProductToCart();
     basePage.goToCheckout();
-    if (await checkoutPage.checkProductAvailability()) {
+    if (await checkoutPage.checkIfProductNotAvailable()) {
         console.log('Product is not available.');
     } else {
         checkoutPage.fillBillingDetails(USER);

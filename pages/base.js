@@ -31,14 +31,13 @@ module.exports = {
     I.click(this.checkoutButton);
   },
 
-  async checkCartProducts() {
+  async checkCartIsNotEmpty() {
     I.click(this.cartSpoiler);
-    let CartProducts = await tryTo(() => I.seeElement(this.deleteProductFromCartButton));
-    return CartProducts;
+    return await tryTo(() => I.seeElement(this.deleteProductFromCartButton));
   },
   
   async clearCart() {
-    if (await this.checkCartProducts()) {
+    if (await this.checkCartIsNotEmpty()) {
       while (await I.grabNumberOfVisibleElements(this.deleteProductFromCartButton)) {
         I.click(this.deleteProductFromCartButton);
       };

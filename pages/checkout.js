@@ -26,7 +26,7 @@ module.exports = {
   productUnavailable: {xpath: '//span[@class="text-danger"]'},
 
  
-  async checkProductAvailability() {
+  async checkIfProductNotAvailable() {
     return await tryTo(() => I.seeElement(this.productUnavailable));
   },
   
