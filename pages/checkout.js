@@ -23,8 +23,14 @@ module.exports = {
   vat: {xpath: '//table[@class="table table-bordered table-hover"]/tfoot/tr[4]/td[2]'},
   checkoutTotal: {xpath: '//table[@class="table table-bordered table-hover"]/tfoot/tr[5]/td[2]'},
   orderCorfinmed: {xpath: '//div[@class="col-sm-12"]/h1'},
+  productUnavailable: {xpath: '//span[@class="text-danger"]'},
 
  
+  async checkProductAvailability() {
+    return await tryTo(() => I.seeElement(this.productUnavailable));
+  },
+  
+  
   fillBillingDetails (user) {
     I.click(this.newAddressToggle);
     I.fillField(this.paymentFirstName, user.firstName);

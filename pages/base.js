@@ -7,7 +7,7 @@ module.exports = {
   cartSpoiler: {xpath: '//div[@id="cart"]'},
   viewCartButton: {xpath: '//a[contains(text(),"View Cart")]'},
   checkoutButton: {xpath: '//a[contains(text(),"Checkout")]'},
-  deleteProductFromCartButton: {xpath: '//i[@class="fa fa-times-circle"]'},
+  deleteProductFromCartButton: {xpath: '//i[@class="linearicons-trash"]'},
   
   clickMyAccountSpoiler() {
     I.click(this.myAccountSpoiler);
@@ -31,13 +31,17 @@ module.exports = {
     I.click(this.checkoutButton);
   },
 
-  async clearCart() {
+  async checkCartProducts() {
     I.click(this.cartSpoiler);
-    I.click(this.viewCartButton);
-    while (await I.grabNumberOfVisibleElements(this.deleteProductFromCartButton) != 0) {
-      I.click(this.deleteProductFromCartButton);
-    };
+    let CartProducts = await tryTo(() => I.seeElement(this.deleteProductFromCartButton));
+    return CartProducts;
+  },
+  
+  async clearCart() {
+    if (await this.checkCartProducts()) {
+      while (await I.grabNumberOfVisibleElements(this.deleteProductFromCartButton)) {
+        I.click(this.deleteProductFromCartButton);
+      };
+    }  
   }
-
-
 }
