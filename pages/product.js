@@ -1,5 +1,3 @@
-const base = require("./base");
-
 const { I } = inject();
 
 module.exports = {
@@ -8,18 +6,52 @@ module.exports = {
   sizeListSpoiler: {xpath: '//label[contains(text(),"Size")]/following-sibling::div'},
   chooseSize: {xpath: '//label[contains(text(),"Size")]/following-sibling::div/ul/li[2]'},
   addToCartButton: {xpath: '//button[@id="button-cart"]'},
-  baseProductPrice: {xpath: '//span[@class="price-new"]'},
+  baseProductPrice: {xpath: '//div[@class="price"]/span'},
 
+  async checkColourExists() {
+    return await tryTo(() => I.seeElement(this.colourListSpoiler));
+  },
   
+  async chooseProductColour() {
+    if (await this.checkColourExists()) {
+      I.click(this.colourListSpoiler);
+      I.click(this.chooseColour);
+    } 
+  },  
 
-  chooseProductColour() {
-    I.click(this.colourListSpoiler);
-    I.click(this.chooseColour);
+  async getColourPrice() {
+    let colourPrice = 0;
+    if (await this.checkColourExists()) {
+      colourPrice = parseFloat((await I.grabTextFrom(this.chooseColour)).replaceAll(/[^0-9\.]/g, ""));
+    } 
+    return colourPrice;
+
   },
 
-  chooseProductSize() {
-    I.click(this.sizeListSpoiler);
-    I.click(this.chooseSize);
+  async checkSizeExists() {
+    return await tryTo(() => I.seeElement(this.sizeListSpoiler));
+  },
+
+  async chooseProductSize() {
+    if (await this.checkSizeExists()) {
+      I.click(this.sizeListSpoiler);
+      I.click(this.chooseSize);
+    } 
+  },
+
+  async getSizePrice() {
+    let sizePrice = 0;
+    if (await this.checkSizeExists()) {
+      sizePrice = parseFloat((await I.grabTextFrom(this.chooseSize)).replaceAll(/[^0-9\.]/g, ""));
+    } 
+    return sizePrice;
+  },
+
+  async getSumOfProductPrices () {
+    let basePrice = parseFloat((await I.grabTextFrom(this.baseProductPrice)).replaceAll(/[^0-9\.]/g, ""));
+    let sumOfProductPrices = (basePrice + await this.getColourPrice() + await this.getSizePrice());
+    return sumOfProductPrices;
+    
   },
 
   addProductToCart() {
@@ -27,13 +59,4 @@ module.exports = {
   },
 
 
-  async getSumOfProductPrices () {
-    let basePrice = parseFloat((await I.grabTextFrom(this.baseProductPrice)).match('([0-9]*[.])[0-9]*')[0]);
-    let colourPrice = parseFloat((await I.grabTextFrom(this.chooseColour)).match('([0-9]*[.])[0-9]*')[0]);
-    let sizePrice = parseFloat((await I.grabTextFrom(this.chooseSize)).match('([0-9]*[.])[0-9]*')[0]);
-    let sumOfProductPrices = (basePrice + colourPrice + sizePrice) * 2;
-    return sumOfProductPrices;
-    
-  },
-  
 }
