@@ -34,7 +34,7 @@ exports.config = {
         'Accept': 'application/json',
       }
     },
-    JSONResponce: {},
+    JSONResponse: {},
   },
   include: {
     I: './steps_file.js',
