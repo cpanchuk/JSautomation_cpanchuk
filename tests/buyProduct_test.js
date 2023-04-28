@@ -26,7 +26,7 @@ Data(urlArray).Scenario('buy product',  async ({ I, current, basePage, productPa
     I.amOnPage(current);
     await productPage.chooseProductColour();
     await productPage.chooseProductSize();
-    let productPrice = await productPage.getSumOfProductPrices();
+    let productPrice = await productPage.sumOfProductPrices();
     productPage.addProductToCart();
     basePage.goToCheckout();
     if (await checkoutPage.checkIfProductNotAvailable()) {
@@ -40,7 +40,14 @@ Data(urlArray).Scenario('buy product',  async ({ I, current, basePage, productPa
         let checkoutTotalPrice = await checkoutPage.grabCheckoutPrice();
         I.assertEqual(productPrice + productTax, checkoutTotalPrice);
         checkoutPage.confirmOrder();
-        checkoutPage.verifyPurchaseSuccessful()
+        checkoutPage.verifyPurchaseSuccessful();
+
+    const response = await I.sendGetRequest("https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?valcode=USD&json");
+    I.seeResponseCodeIs(200);
+    const usdRate = response.data[0].rate;
+    console.log("Price in UAH is: " + (checkoutTotalPrice * usdRate));
+    
+
     };
 
 }).tag("buy");

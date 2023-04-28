@@ -64,16 +64,15 @@ module.exports = {
   },
 
   async getSumOfTaxes () {
-    let shippingRatePrice = parseFloat((await I.grabTextFrom(this.shippingRate)).replaceAll(/[^0-9\.]/g, ""));
-    let ecoTaxPrice = parseFloat((await I.grabTextFrom(this.ecoTax)).replaceAll(/[^0-9\.]/g, ""));
-    let vatPrice = parseFloat((await I.grabTextFrom(this.vat)).replaceAll(/[^0-9\.]/g, ""));
+    let shippingRatePrice = await I.parsePrice(await I.grabTextFrom(this.shippingRate));
+    let ecoTaxPrice = await I.parsePrice(await I.grabTextFrom(this.ecoTax));
+    let vatPrice = await I.parsePrice(await I.grabTextFrom(this.vat));
     let sumOfTaxes = shippingRatePrice + ecoTaxPrice + vatPrice;
     return sumOfTaxes;
   },
 
   async grabCheckoutPrice () {
-    let checkoutTotalPrice = 
-      parseFloat((await I.grabTextFrom(this.checkoutTotal)).replaceAll(/[^0-9\.]/g, ""));
+    let checkoutTotalPrice = await I.parsePrice(await I.grabTextFrom(this.checkoutTotal));
 
     return checkoutTotalPrice;
   },
