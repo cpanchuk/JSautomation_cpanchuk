@@ -1,3 +1,5 @@
+const base = require("./base");
+
 const { I } = inject();
 
 module.exports = {
@@ -8,6 +10,11 @@ module.exports = {
   addToCartButton: {xpath: '//button[@id="button-cart"]'},
   baseProductPrice: {xpath: '//div[@class="price"]/span'},
 
+  async getBaseProductPrice () {
+    let basePrice = await I.parsePrice(await I.grabTextFrom(this.baseProductPrice));
+    return basePrice;
+  },
+  
   async checkColourExists() {
     return await tryTo(() => I.seeElement(this.colourListSpoiler));
   },
@@ -22,10 +29,10 @@ module.exports = {
   async getColourPrice() {
     let colourPrice = 0;
     if (await this.checkColourExists()) {
-      colourPrice = parseFloat((await I.grabTextFrom(this.chooseColour)).replaceAll(/[^0-9\.]/g, ""));
-    } 
+      colourPrice = await I.parsePrice(await I.grabTextFrom(this.chooseColour));
+    }
     return colourPrice;
-
+    
   },
 
   async checkSizeExists() {
@@ -42,16 +49,15 @@ module.exports = {
   async getSizePrice() {
     let sizePrice = 0;
     if (await this.checkSizeExists()) {
-      sizePrice = parseFloat((await I.grabTextFrom(this.chooseSize)).replaceAll(/[^0-9\.]/g, ""));
+      sizePrice = await I.parsePrice(await I.grabTextFrom(this.chooseSize)); 
     } 
     return sizePrice;
   },
 
-  async getSumOfProductPrices () {
-    let basePrice = parseFloat((await I.grabTextFrom(this.baseProductPrice)).replaceAll(/[^0-9\.]/g, ""));
-    let sumOfProductPrices = (basePrice + await this.getColourPrice() + await this.getSizePrice());
-    return sumOfProductPrices;
-    
+
+  async sumOfProductPrices () {
+    let sumOfProductPrices = (await this.getBaseProductPrice() + await this.getColourPrice() + await this.getSizePrice());
+    return sumOfProductPrices;  
   },
 
   addProductToCart() {
